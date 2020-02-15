@@ -46,13 +46,7 @@ public:
 	{
 		return *this = *this + other;
 	}
-	String(const char* str) :String(strlen(str) + 1)
-	{
-		this->size = strlen(str) + 1;
-		this->str = new char[size];
-		for (int i = 0; i < size; i++)	this->str[i] = str[i];
-		std::cout << "Constructor:\t" << this << std::endl;
-	}
+	
 	String(const String& other) :String(other.str)
 	{
 		//this->str = new char[size];
@@ -64,7 +58,30 @@ public:
 		delete[] this->str;
 		std::cout << "Destructor:\t" << this << std::endl;
 	}
-
+	String(const char* str) :String(strlen(str) + 1)
+	{
+		this->size = strlen(str) + 1;
+		this->str = new char[size];
+		for (int i = 0; i < size; i++)	this->str[i] = str[i];
+		std::cout << "Constructor:\t" << this << std::endl;
+	}
+	///////////////////////////////////////////////////////////////////////////
+	String(String&& other) :size(other.size), str(other.str)
+	{
+		this->size = other.size;
+		this->str = other.str;
+		other.str = nullptr;
+		std::cout << " Move Construnctor:\t" << this << std::endl;
+	}
+	String& operator= (String && other)
+	{
+		delete str;
+		this->str = other.str;
+		other.str = nullptr;
+		std::cout << "Move Assignment\t" << this << std::endl;
+		return *this;
+	}
+	/////////////////////////////////////////////////////////////////////////////
 	String& operator=(const String& other)
 	{
 		if (this == &other)return *this;
@@ -75,7 +92,7 @@ public:
 		std::cout << "CopyAssignment:\t" << this << std::endl;
 		return *this;
 	}
-
+	
 	//		Methods:
 	void print()
 	{
